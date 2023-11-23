@@ -1,7 +1,7 @@
-chartor02/HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
+**/chartor02/HELP.md
+**/.gradle
+**/build/
+!**/gradle/wrapper/gradle-wrapper.jar
 !**/**/src/main/**/build/
 !**/**/src/test/**/build/
 

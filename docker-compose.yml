@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  mysql-container:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: jason1653
+      MYSQL_DATABASE: spring_batch
+      MYSQL_USER: jason
+      MYSQL_PASSWORD: jason1653
+    ports:
+      - "3306:3306"

@@ -10,12 +10,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
-@Configuration
+//@Configuration
 class BatchConfig(
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager,
 ) {
 
+    /*
     @Bean
     fun step1(): Step {
         return StepBuilder("basicJob", jobRepository).tasklet({ contribution, chunkContext ->
@@ -28,4 +29,6 @@ class BatchConfig(
     fun job(): Job {
         return JobBuilder("step1", jobRepository).start(step1()).build()
     }
+
+     */
 }

@@ -1,6 +1,7 @@
 package io.spring.boot.chapter04.job
 
 import io.spring.boot.chapter04.batch.DailyJobTimestamper
+import io.spring.boot.chapter04.batch.JobLoggerListener
 import io.spring.boot.chapter04.batch.ParameterValidator
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -29,8 +30,9 @@ class HelloWorldJob(
         System.out.println("HelloWorldJob.job()")
         return JobBuilder("basicJob", jobRepository)
             .start(step1()) // step 등록
-            .validator(validator()) // 커스텀 validator 등록
+//            .validator(validator()) // 커스텀 validator 등록
             .incrementer(DailyJobTimestamper())
+            .listener(JobLoggerListener())
             .build()
     }
 
@@ -39,7 +41,6 @@ class HelloWorldJob(
         System.out.println("HelloWorldJob.step1()")
         return StepBuilder("step1", jobRepository)
             .tasklet(helloWorldTasklet(null, null), transactionManager)
-            .allowStartIfComplete(true)
             .build()
     }
 
@@ -63,8 +64,8 @@ class HelloWorldJob(
     @StepScope
     @Bean
     fun helloWorldTasklet(
-        @Value("#{jobParameters['name']}") name: String? = null,
-        @Value("#{jobParameters['fileName']}") fileName: String? = null,
+        @Value("#{jobParameters['name']}") name: String?,
+        @Value("#{jobParameters['fileName']}") fileName: String?,
     ): Tasklet {
         System.out.println("HelloWorldJob.helloWorldTasklet()")
 

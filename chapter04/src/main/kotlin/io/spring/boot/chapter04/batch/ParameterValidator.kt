@@ -9,10 +9,13 @@ class ParameterValidator : JobParametersValidator {
     override fun validate(parameters: JobParameters?) {
         val fileName = parameters?.getString("fileName")
 
+        /*
         if (!StringUtils.hasText(fileName)) {
             throw JobParametersInvalidException("fileName parameter is missing")
         } else if (!StringUtils.endsWithIgnoreCase(fileName, "csv")) {
             throw JobParametersInvalidException("fileName parameter does not use the csv file extension")
         }
+
+         */
     }
 }

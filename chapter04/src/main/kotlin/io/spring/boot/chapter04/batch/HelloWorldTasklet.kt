@@ -8,8 +8,8 @@ import org.springframework.batch.repeat.RepeatStatus
 
 class HelloWorldTasklet : Tasklet {
     private val HELLO_WORLD: String = "Hello, %s"
-    override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus? {
-        val name: String = chunkContext.stepContext.jobParameters.get("name") as String
+    override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
+        val name: String = chunkContext.stepContext.jobParameters.get("name") as String? ?: ""
 
         val jobContext: ExecutionContext = chunkContext
             .stepContext
@@ -20,6 +20,7 @@ class HelloWorldTasklet : Tasklet {
         jobContext.put("user.name", name)
 
         println(String.format(HELLO_WORLD, name))
+        println("HelloWorldTasklet - execute")
         return RepeatStatus.FINISHED
     }
 }

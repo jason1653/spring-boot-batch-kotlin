@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 import java.util.*
 
-@Configuration
+//@Configuration
 class ChunkJob(
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager,

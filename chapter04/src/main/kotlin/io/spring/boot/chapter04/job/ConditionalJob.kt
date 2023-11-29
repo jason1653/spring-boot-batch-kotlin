@@ -1,5 +1,6 @@
 package io.spring.boot.chapter04.job
 
+import io.spring.boot.chapter04.batch.RandomDecider
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.StepContribution
 import org.springframework.batch.core.job.builder.JobBuilder
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
 
-@Configuration
+//@Configuration
 class ConditionalJob(
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager,
@@ -22,8 +23,9 @@ class ConditionalJob(
     @Bean
     fun passTasklet(): Tasklet {
         return Tasklet { contribution: StepContribution?, chunkContext: ChunkContext? ->
-            return@Tasklet RepeatStatus.FINISHED
-//            throw RuntimeException("Causing a failure")
+            println("Pass!")
+//            return@Tasklet RepeatStatus.FINISHED
+            throw RuntimeException("Causing a failure")
         }
     }
 
@@ -45,11 +47,32 @@ class ConditionalJob(
 
     @Bean
     fun job(): Job {
+        /*
         return JobBuilder("conditionalJob", jobRepository)
             .start(firstStep())
+            .next(decider())
+            .from(decider())
             .on("FAILED").to(failureStep())
-            .from(firstStep()).on("*").to(successStep())
+            .from(decider())
+            .on("*").to(successStep())
+            .end()
+            .build()
+         */
 
+        /*
+        return JobBuilder("conditionalJob", jobRepository)
+            .start(firstStep())
+            .on("FAILED").end()
+            .from(firstStep()).on("*").to(successStep())
+            .end()
+            .build()
+
+         */
+
+        return JobBuilder("conditionalJob", jobRepository)
+            .start(firstStep())
+            .on("FAILED").stopAndRestart(successStep())
+            .from(firstStep()).on("*").to(successStep())
             .end()
             .build()
     }
@@ -76,5 +99,10 @@ class ConditionalJob(
             .tasklet(failTasklet(), transactionManager)
             .allowStartIfComplete(true)
             .build()
+    }
+
+    @Bean
+    fun decider(): RandomDecider {
+        return RandomDecider()
     }
 }
